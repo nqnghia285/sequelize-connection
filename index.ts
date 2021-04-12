@@ -64,7 +64,7 @@ export function connect(): Sequelize {
                 timestamps: true,
             },
             // logging: log, //(...msg) => { console.log(msg) },
-            benchmark: true,
+            // benchmark: true,
         });
     }
 }
