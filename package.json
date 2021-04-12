@@ -1,6 +1,6 @@
 {
     "name": "sequelize-connection",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "description": "Configure to connect to database by Sequelize.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
