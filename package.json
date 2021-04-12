@@ -1,0 +1,35 @@
+{
+    "name": "sequelize-connection",
+    "version": "1.0.9",
+    "description": "Configure to connect to database by Sequelize.",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "repository": "https://github.com/nqnghia285/sequelize-connecttion.git",
+    "author": "nghia <nqnghia285@gmail.com>",
+    "license": "MIT",
+    "private": false,
+    "scripts": {
+        "test": "echo \"Error: no test specified $npm_package_version\" && exit 1",
+        "prepare": "tsc",
+        "git": "git add -A && git commit -m \"Update version: %npm_package_version%\" && git push",
+        "push": "yarn git && npm publish",
+        "v": "yarn version --patch"
+    },
+    "homepage": "https://github.com/nqnghia285/sequelize-connecttion.git#readme",
+    "keywords": [
+        "sequelize-connect-database",
+        "connect",
+        "sequelize"
+    ],
+    "files": [
+        "dist"
+    ],
+    "dependencies": {
+        "@types/dotenv": "^8.2.0",
+        "dotenv": "^8.2.0",
+        "sequelize": "^6.6.2"
+    },
+    "devDependencies": {
+        "cross-conf-env": "^1.2.1"
+    }
+}
