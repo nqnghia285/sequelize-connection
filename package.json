@@ -1,6 +1,6 @@
 {
     "name": "sequelize-connection",
-    "version": "1.0.5",
+    "version": "1.0.4",
     "description": "Configure to connect to database by Sequelize.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -12,7 +12,7 @@
         "test": "echo \"Error: no test specified $npm_package_version\" && exit 1",
         "prepare": "tsc",
         "git": "git add -A && git commit -m \"Update version: %npm_package_version%\" && git push",
-        "push": "yarn git && npm publish",
+        "push": "yarn publish",
         "v": "yarn version --patch"
     },
     "homepage": "https://github.com/nqnghia285/sequelize-connecttion.git#readme",
