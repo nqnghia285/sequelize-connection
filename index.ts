@@ -63,8 +63,8 @@ export function connect(): Sequelize {
                 freezeTableName: true,
                 timestamps: true,
             },
-            // logging: log, //(...msg) => { console.log(msg) },
-            // benchmark: true,
+            logging: console.log,
+            benchmark: true,
         });
     }
 }
