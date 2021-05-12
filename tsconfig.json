@@ -11,6 +11,6 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true
     },
-    "include": ["index.ts", "index.d.ts"],
+    "include": ["lib", "index.ts", "index.d.ts"],
     "exclude": ["node_modules", "dist"]
 }

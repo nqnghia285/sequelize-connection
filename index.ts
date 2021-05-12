@@ -1,77 +1,90 @@
 import dotenv from "dotenv";
 import { Dialect, Sequelize } from "sequelize";
+import { ConnectionDevelopmentENVType, ConnectionProductionENVType, ConnectionType } from "./lib/interface";
 
 dotenv.config();
 
 /**
- * @method sequelize: Object Sequelize
+ * @method sequelize Sequelize instance
  */
-const sequelize: Sequelize = connect();
+let sequelize: Sequelize = new Sequelize();
 
 /**
- * @method connect: Create a connection to database by Sequelize
+ * @method initConnectToDatabase Initiate Sequelize intance
+ * @param params ConnectionType
+ */
+export function initConnectToDatabase(params: ConnectionType): void {
+    sequelize = connect(params);
+}
+
+/**
+ * @method connect Create a connection to database by Sequelize
+ * @param params ConnectionType
  * @returns Sequelize
  */
-export function connect(): Sequelize {
+export function connect(params: ConnectionType): Sequelize {
     if (process.env.NODE_ENV === "production") {
-        const DATABASE_URL: string = process.env.DATABASE_URL || "your-database-url";
+        const connection: ConnectionProductionENVType = params;
 
-        return new Sequelize(DATABASE_URL, {
-            dialectOptions: {
-                ssl: {
-                    rejectUnauthorized: false,
+        if (connection.databaseURL !== undefined) {
+            return new Sequelize(connection.databaseURL, {
+                dialectOptions: {
+                    ssl: {
+                        rejectUnauthorized: false,
+                    },
                 },
-            },
-            pool: {
-                max: 5,
-                min: 0,
-                acquire: 30000,
-                idle: 10000,
-            },
-            define: {
-                freezeTableName: true,
-                timestamps: false,
-            },
-            // logging: console.log, //(...msg) => { console.log(msg) },
-            // benchmark: true
-        });
+                pool: {
+                    max: 5,
+                    min: 0,
+                    acquire: 30000,
+                    idle: 10000,
+                },
+                define: {
+                    freezeTableName: true,
+                    timestamps: false,
+                },
+                // logging: console.log, //(...msg) => { console.log(msg) },
+                // benchmark: true
+            });
+        } else {
+            return new Sequelize();
+        }
     } else {
-        const database = process.env.DATABASE || "your-database";
-        const username = process.env.USER || "your-username-of-database";
-        const password = process.env.PASSWORD;
-        const dialect: Dialect = dialectConvert(process.env.DIALECT);
-        const host = process.env.HOST;
-        const port = process.env.DATABASE_PORT;
+        const connection: ConnectionDevelopmentENVType = params;
 
-        return new Sequelize(database, username, password, {
-            //mydb myuser
-            dialect: dialect,
-            dialectOptions: {
-                host: host,
-                port: port,
-                user: username,
-                password: password,
-                database: database,
-            },
-            pool: {
-                max: 5,
-                min: 0,
-                acquire: 30000,
-                idle: 10000,
-            },
-            define: {
-                freezeTableName: true,
-                timestamps: true,
-            },
-            // logging: console.log,
-            // benchmark: true,
-        });
+        if (connection.database !== undefined && connection.username) {
+            return new Sequelize(connection.database, connection.username, connection.password, {
+                //mydb myuser
+                dialect: dialectConvert(connection.dialect),
+                dialectOptions: {
+                    host: connection.host,
+                    port: connection.port,
+                    user: connection.username,
+                    password: connection.password,
+                    database: connection.database,
+                },
+                pool: {
+                    max: 5,
+                    min: 0,
+                    acquire: 30000,
+                    idle: 10000,
+                },
+                define: {
+                    freezeTableName: true,
+                    timestamps: false,
+                },
+                // logging: console.log,
+                // benchmark: true,
+            });
+        } else {
+            return new Sequelize();
+        }
     }
 }
 
 /**
- * @method dialectConvert: Convert a string to Dialect
- * @param dialect
+ * @method dialectConvert Convert a string to Dialect
+ * @param dialect string | undefined
  * @returns Dialect
  */
 export function dialectConvert(dialect: string | undefined): Dialect {
