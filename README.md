@@ -35,7 +35,7 @@ function dialectConvert(dialect: string | undefined): Dialect;
 ```typescript
 // ES6
 import sequelize, { initConnectToDatabase } from "sequelize-connection";
-import { ConnectionDevelopmentENVType, ConnectionProductionENVType, ConnectionType } from "sequelize-connection/lib/interface";
+import { ConnectionDevelopmentENVType, ConnectionProductionENVType, ConnectionType } from "sequelize-connection/dist/lib/interface";
 
 ...
 // DEV_ENV
