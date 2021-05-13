@@ -6,10 +6,20 @@ Sequelize Connection support us to connect to database.
 
 ```typescript
 /**
- * @method initConnectToDatabase Initiate Sequelize intance
- * @param params ConnectionType
+ * @method connectWithSSL Connect to batabase by ssl
+ * @param params ConnectionProductionENVType
+ * @returns Sequelize
  */
-function initConnectToDatabase(params: ConnectionType): void;
+function connectWithSSL(params: ConnectionProductionENVType): Sequelize;
+```
+
+```typescript
+/**
+ * @method connectWithOptions Connect to database with options
+ * @param params ConnectionDevelopmentENVType
+ * @returns Sequelize
+ */
+function connectWithOptions(params: ConnectionDevelopmentENVType): Sequelize;
 ```
 
 ```typescript
@@ -34,30 +44,72 @@ function dialectConvert(dialect: string | undefined): Dialect;
 
 ```typescript
 // ES6
-import sequelize, { initConnectToDatabase } from "sequelize-connection";
+import { connect, connectWithSSL, connectWithOptions } from "sequelize-connection";
+import { Sequelize } from "sequelize";
 import { ConnectionDevelopmentENVType, ConnectionProductionENVType, ConnectionType } from "sequelize-connection/dist/lib/interface";
 
-...
-// DEV_ENV
-const connection: ConnectionDevelopmentENVType = {
-    database: "your-database",
-    username: "your-username",
-    password: "your-password",
-    dialect: "postgres, mysql...",
-    host: "your-host",
-    port: "port of database" | 1234
+let sequelize: Sequelize | undefined = undefined;
+
+......
+// Variables of production environment
+const databaseURL = process.env.DATABASE_URL;
+if (databaseURL !== undefined) {
+    const connection: ConnectionProductionENVType = {
+        databaseURL: databaseURL
+    };
+
+    sequelize = connectWithSSL(connection);
 }
 
-...
-// PRO_ENV
-const connection: ConnectionProductionENVType = {
-    databaseURL: "your-database-url"
+......
+// Variables of development environment
+const database = process.env.DATABASE;
+const user = process.env.USER;
+const password = process.env.PASSWORD;
+const host = process.env.HOST;
+const dialect = process.env.DIALECT;
+const databasePort = process.env.DATABASE_PORT;
+
+if (database !== undefined && user !== undefined && password !== undefined && host !== undefined && dialect !== undefined && databasePort !== undefined) {
+    const connection: ConnectionDevelopmentENVType = {
+        database: database,
+        username: user,
+        password: password,
+        dialect: dialect,
+        host: host,
+        port: databasePort
+    };
+
+    sequelize = connectWithOptions(connection);
 }
 
-// Init sequelize instance connect to database
-initConnectToDatabase(connection);
-...
+......
+// Variables of production environment
+const databaseURL = process.env.DATABASE_URL;
 
+// Variables of development environment
+const database = process.env.DATABASE;
+const user = process.env.USER;
+const password = process.env.PASSWORD;
+const host = process.env.HOST;
+const dialect = process.env.DIALECT;
+const databasePort = process.env.DATABASE_PORT;
+
+if (databaseURL !== undefined && database !== undefined && user !== undefined && password !== undefined && host !== undefined && dialect !== undefined && databasePort !== undefined) {
+    const connection: ConnectionDevelopmentENVType = {
+        databaseURL: databaseURL,
+        database: database,
+        username: user,
+        password: password,
+        dialect: dialect,
+        host: host,
+        port: databasePort
+    };
+
+    sequelize = connect(connection);
+}
+
+......
 // Define model
 sequelize.define("User",
     {

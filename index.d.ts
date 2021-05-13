@@ -1,16 +1,19 @@
 import { Dialect, Sequelize } from "sequelize";
-import { ConnectionType } from "./lib/interface";
+import { ConnectionDevelopmentENVType, ConnectionProductionENVType, ConnectionType } from "./lib/interface";
 
 /**
- * @method sequelize Sequelize instance
+ * @method connectWithSSL Connect to batabase by ssl
+ * @param params ConnectionProductionENVType
+ * @returns Sequelize
  */
-declare let sequelize: Sequelize;
+export declare function connectWithSSL(params: ConnectionProductionENVType): Sequelize;
 
 /**
- * @method initConnectToDatabase Initiate Sequelize intance
- * @param params ConnectionType
+ * @method connectWithOptions Connect to database with options
+ * @param params ConnectionDevelopmentENVType
+ * @returns Sequelize
  */
-export declare function initConnectToDatabase(params: ConnectionType): void;
+export declare function connectWithOptions(params: ConnectionDevelopmentENVType): Sequelize;
 
 /**
  * @method connect Create a connection to database by Sequelize
@@ -25,5 +28,3 @@ export declare function connect(params: ConnectionType): Sequelize;
  * @returns Dialect
  */
 export declare function dialectConvert(dialect: string | undefined): Dialect;
-
-export default sequelize;

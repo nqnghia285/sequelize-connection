@@ -5,16 +5,60 @@ import { ConnectionDevelopmentENVType, ConnectionProductionENVType, ConnectionTy
 dotenv.config();
 
 /**
- * @method sequelize Sequelize instance
+ * @method connectWithSSL Connect to batabase by ssl
+ * @param params ConnectionProductionENVType
+ * @returns Sequelize
  */
-let sequelize: Sequelize = new Sequelize();
+export function connectWithSSL(params: ConnectionProductionENVType): Sequelize {
+    return new Sequelize(params.databaseURL, {
+        dialectOptions: {
+            ssl: {
+                rejectUnauthorized: false,
+            },
+        },
+        pool: {
+            max: 5,
+            min: 0,
+            acquire: 30000,
+            idle: 10000,
+        },
+        define: {
+            freezeTableName: true,
+            timestamps: false,
+        },
+        // logging: console.log, //(...msg) => { console.log(msg) },
+        // benchmark: true
+    });
+}
 
 /**
- * @method initConnectToDatabase Initiate Sequelize intance
- * @param params ConnectionType
+ * @method connectWithOptions Connect to database with options
+ * @param params ConnectionDevelopmentENVType
+ * @returns Sequelize
  */
-export function initConnectToDatabase(params: ConnectionType): void {
-    sequelize = connect(params);
+export function connectWithOptions(params: ConnectionDevelopmentENVType): Sequelize {
+    return new Sequelize(params.database, params.username, params.password, {
+        dialect: dialectConvert(params.dialect),
+        dialectOptions: {
+            host: params.host,
+            port: params.port,
+            user: params.username,
+            password: params.password,
+            database: params.database,
+        },
+        pool: {
+            max: 5,
+            min: 0,
+            acquire: 30000,
+            idle: 10000,
+        },
+        define: {
+            freezeTableName: true,
+            timestamps: false,
+        },
+        // logging: console.log,
+        // benchmark: true,
+    });
 }
 
 /**
@@ -25,60 +69,10 @@ export function initConnectToDatabase(params: ConnectionType): void {
 export function connect(params: ConnectionType): Sequelize {
     if (process.env.NODE_ENV === "production") {
         const connection: ConnectionProductionENVType = params;
-
-        if (connection.databaseURL !== undefined) {
-            return new Sequelize(connection.databaseURL, {
-                dialectOptions: {
-                    ssl: {
-                        rejectUnauthorized: false,
-                    },
-                },
-                pool: {
-                    max: 5,
-                    min: 0,
-                    acquire: 30000,
-                    idle: 10000,
-                },
-                define: {
-                    freezeTableName: true,
-                    timestamps: false,
-                },
-                // logging: console.log, //(...msg) => { console.log(msg) },
-                // benchmark: true
-            });
-        } else {
-            return new Sequelize();
-        }
+        return connectWithSSL(connection);
     } else {
         const connection: ConnectionDevelopmentENVType = params;
-
-        if (connection.database !== undefined && connection.username) {
-            return new Sequelize(connection.database, connection.username, connection.password, {
-                //mydb myuser
-                dialect: dialectConvert(connection.dialect),
-                dialectOptions: {
-                    host: connection.host,
-                    port: connection.port,
-                    user: connection.username,
-                    password: connection.password,
-                    database: connection.database,
-                },
-                pool: {
-                    max: 5,
-                    min: 0,
-                    acquire: 30000,
-                    idle: 10000,
-                },
-                define: {
-                    freezeTableName: true,
-                    timestamps: false,
-                },
-                // logging: console.log,
-                // benchmark: true,
-            });
-        } else {
-            return new Sequelize();
-        }
+        return connectWithOptions(connection);
     }
 }
 
@@ -109,5 +103,3 @@ export function dialectConvert(dialect: string | undefined): Dialect {
             return "postgres";
     }
 }
-
-export default sequelize;
