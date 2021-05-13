@@ -48,72 +48,66 @@ import { connect, connectWithSSL, connectWithOptions } from "sequelize-connectio
 import { Sequelize } from "sequelize";
 import { ConnectionDevelopmentENVType, ConnectionProductionENVType, ConnectionType } from "sequelize-connection/dist/lib/interface";
 
-let sequelize: Sequelize | undefined = undefined;
-
-......
 // Variables of production environment
-const databaseURL = process.env.DATABASE_URL;
-if (databaseURL !== undefined) {
-    const connection: ConnectionProductionENVType = {
-        databaseURL: databaseURL
-    };
+const databaseURL = process.env.DATABASE_URL || "your-database-url";
 
-    sequelize = connectWithSSL(connection);
-}
+const connection: ConnectionProductionENVType = {
+    databaseURL: databaseURL
+};
+
+const sequelize = connectWithSSL(connection);
 
 ......
 // Variables of development environment
-const database = process.env.DATABASE;
-const user = process.env.USER;
-const password = process.env.PASSWORD;
-const host = process.env.HOST;
-const dialect = process.env.DIALECT;
-const databasePort = process.env.DATABASE_PORT;
+const database = process.env.DATABASE || "your-database";
+const user = process.env.USER || "postgres";
+const password = process.env.PASSWORD || "your-password ";
+const host = process.env.HOST || "0.0.0.0";
+const dialect = process.env.DIALECT || "postgres";
+const databasePort = process.env.DATABASE_PORT || "5432";
 
-if (database !== undefined && user !== undefined && password !== undefined && host !== undefined && dialect !== undefined && databasePort !== undefined) {
-    const connection: ConnectionDevelopmentENVType = {
-        database: database,
-        username: user,
-        password: password,
-        dialect: dialect,
-        host: host,
-        port: databasePort
-    };
+const connection: ConnectionDevelopmentENVType = {
+    database: database,
+    username: user,
+    password: password,
+    dialect: dialect,
+    host: host,
+    port: databasePort
+};
 
-    sequelize = connectWithOptions(connection);
-}
+const sequelize = connectWithOptions(connection);
+
 
 ......
 // Variables of production environment
-const databaseURL = process.env.DATABASE_URL;
+const databaseURL = process.env.DATABASE_URL || "your-database-url";
 
 // Variables of development environment
-const database = process.env.DATABASE;
-const user = process.env.USER;
-const password = process.env.PASSWORD;
-const host = process.env.HOST;
-const dialect = process.env.DIALECT;
-const databasePort = process.env.DATABASE_PORT;
+const database = process.env.DATABASE || "your-database";
+const user = process.env.USER || "postgres";
+const password = process.env.PASSWORD || "your-password ";
+const host = process.env.HOST || "0.0.0.0";
+const dialect = process.env.DIALECT || "postgres";
+const databasePort = process.env.DATABASE_PORT || "5432";
 
-if (databaseURL !== undefined && database !== undefined && user !== undefined && password !== undefined && host !== undefined && dialect !== undefined && databasePort !== undefined) {
-    const connection: ConnectionDevelopmentENVType = {
-        databaseURL: databaseURL,
-        database: database,
-        username: user,
-        password: password,
-        dialect: dialect,
-        host: host,
-        port: databasePort
-    };
 
-    sequelize = connect(connection);
-}
+const connection: ConnectionDevelopmentENVType = {
+    databaseURL: databaseURL,
+    database: database,
+    username: user,
+    password: password,
+    dialect: dialect,
+    host: host,
+    port: databasePort
+};
+
+const sequelize = connect(connection);
 
 ......
 // Define model
 sequelize.define("User",
     {
-        id: { type: SMALLINT, primaryKey: true, autoIncrease: true },
+        id: { type: SMALLINT, primaryKey: true, autoIncrement: true },
 
         username: { type: STRING, allowNull: false },
 
@@ -122,5 +116,8 @@ sequelize.define("User",
 );
 
 // Sync models in database
-sequelize.sync();
+(async () => {
+    await sequelize.sync();
+    await sequelize.models.User.create({ username: "admin@gmail.com", password: "acbxyz" });
+})();
 ```
