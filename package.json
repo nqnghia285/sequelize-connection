@@ -11,7 +11,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified $npm_package_version\" && exit 1",
 		"prepare": "tsc",
-		"git": "git add -A && git commit -m \"Update version: %npm_package_version%\" && git push HEAD:master",
+		"git": "git add -A && git commit -m \"Update version: %npm_package_version%\" && git push HEAD:main",
 		"push": "yarn publish",
 		"v": "yarn version --patch"
 	},
