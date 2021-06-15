@@ -1,26 +1,32 @@
 import { Dialect, Sequelize } from "sequelize";
 import { ConnectionDevelopmentENVType, ConnectionProductionENVType, ConnectionType } from "./lib/interface";
 
+export declare interface IConnectionProductionMode extends ConnectionProductionENVType {}
+
+export declare interface IConnectionDevelopmentMode extends ConnectionDevelopmentENVType {}
+
+export declare interface IConnection extends ConnectionType {}
+
 /**
  * @method connectWithSSL Connect to batabase by ssl
- * @param params ConnectionProductionENVType
+ * @param params IConnectionProductionMode
  * @returns Sequelize
  */
-export declare function connectWithSSL(params: ConnectionProductionENVType): Sequelize;
+export declare function connectWithSSL(params: IConnectionProductionMode): Sequelize;
 
 /**
  * @method connectWithOptions Connect to database with options
- * @param params ConnectionDevelopmentENVType
+ * @param params IConnectionDevelopmentMode
  * @returns Sequelize
  */
-export declare function connectWithOptions(params: ConnectionDevelopmentENVType): Sequelize;
+export declare function connectWithOptions(params: IConnectionDevelopmentMode): Sequelize;
 
 /**
  * @method connect Create a connection to database by Sequelize
- * @param params ConnectionType
+ * @param params IConnection
  * @returns Sequelize
  */
-export declare function connect(params: ConnectionType): Sequelize;
+export declare function connect(params: IConnection): Sequelize;
 
 /**
  * @method dialectConvert Convert a string to Dialect

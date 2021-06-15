@@ -7,28 +7,28 @@ Sequelize Connection support us to connect to database.
 ```typescript
 /**
  * @method connectWithSSL Connect to batabase by ssl
- * @param params ConnectionProductionENVType
+ * @param params IConnectionProductionMode
  * @returns Sequelize
  */
-function connectWithSSL(params: ConnectionProductionENVType): Sequelize;
+function connectWithSSL(params: IConnectionProductionMode): Sequelize;
 ```
 
 ```typescript
 /**
  * @method connectWithOptions Connect to database with options
- * @param params ConnectionDevelopmentENVType
+ * @param params IConnectionDevelopmentMode
  * @returns Sequelize
  */
-function connectWithOptions(params: ConnectionDevelopmentENVType): Sequelize;
+function connectWithOptions(params: IConnectionDevelopmentMode): Sequelize;
 ```
 
 ```typescript
 /**
  * @method connect Create a connection to database by Sequelize
- * @param params ConnectionType
+ * @param params IConnection
  * @returns Sequelize
  */
-function connect(params: ConnectionType): Sequelize;
+function connect(params: IConnection): Sequelize;
 ```
 
 ```typescript
@@ -51,7 +51,7 @@ import { ConnectionDevelopmentENVType, ConnectionProductionENVType, ConnectionTy
 // Variables of production environment
 const databaseURL = process.env.DATABASE_URL || "your-database-url";
 
-const connection: ConnectionProductionENVType = {
+const connection: IConnectionProductionMode = {
     databaseURL: databaseURL
 };
 
@@ -66,7 +66,7 @@ const host = process.env.HOST || "0.0.0.0";
 const dialect = process.env.DIALECT || "postgres";
 const databasePort = process.env.DATABASE_PORT || "5432";
 
-const connection: ConnectionDevelopmentENVType = {
+const connection: IConnectionDevelopmentMode = {
     database: database,
     username: user,
     password: password,
@@ -91,7 +91,7 @@ const dialect = process.env.DIALECT || "postgres";
 const databasePort = process.env.DATABASE_PORT || "5432";
 
 
-const connection: ConnectionDevelopmentENVType = {
+const connection: IConnection = {
     databaseURL: databaseURL,
     database: database,
     username: user,
