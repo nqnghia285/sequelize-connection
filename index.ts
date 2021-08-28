@@ -30,6 +30,7 @@ export function connectWithSSL(params: IConnectionProductionMode): Sequelize {
 		},
 		define: {
 			freezeTableName: true,
+			timestamps: true,
 		},
 		// logging: console.log, //(...msg) => { console.log(msg) },
 		// benchmark: true
